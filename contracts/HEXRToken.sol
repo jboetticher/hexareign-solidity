@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: Attribution Assurance License
 pragma solidity ^0.8.4;
  
-import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Pausable.sol";
-import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract HEXRToken is ERC20Pausable, Ownable {
     

@@ -1,2 +1,4 @@
 *.meta
 installed_contracts
+node_modules
+build

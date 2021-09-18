@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Attribution Assurance License
 pragma solidity ^0.8.4;
 import './TileNFT.sol';
-import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import './Improvements/ImprovementNFT.sol';
  
 // An interface for the logic that is performed on a smart contract.

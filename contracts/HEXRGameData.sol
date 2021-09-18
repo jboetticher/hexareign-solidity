@@ -2,9 +2,9 @@
 pragma solidity ^0.8.4;
 import './TileNFT.sol';
 import './IHEXRGameLogic.sol';
-import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/access/Ownable.sol";
-import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/utils/Context.sol";
 import './Improvements/ImprovementNFT.sol';
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
  
 // This contract should get/set a bunch of values.
 // The actual logic should be handled by another contract, in case that contract needs to be replaced.
