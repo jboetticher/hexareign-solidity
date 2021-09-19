@@ -1,4 +1,6 @@
 *.meta
+
+# Be sure to put all of the stuff underneath this in the 
 installed_contracts
 node_modules
 build
