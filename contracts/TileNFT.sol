@@ -32,6 +32,7 @@ contract TileNFT is ERC721Enumerable, Ownable {
     
     function addTiles(uint48[] memory map) external onlyOwner {
         // Loops until the end or runs out of gas.
+        require(map.length <= 40);
         for(uint24 i = uint24(totalSupply()); i < map.length && i < type(uint24).max; i++) {
             staticTileData[i] = map[i];
 

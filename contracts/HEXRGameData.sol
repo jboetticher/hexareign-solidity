@@ -44,8 +44,9 @@ contract HEXRGameData is Context, Ownable, GameStructs {
     
     
     
-    constructor(TileNFT _tiles) {
+    constructor(TileNFT _tiles, HEXRToken _token) {
         tiles = _tiles;
+        token = _token;
     }
     
     modifier onlyGameLogic() {
@@ -103,6 +104,7 @@ contract HEXRGameData is Context, Ownable, GameStructs {
             tileData[tileId] = _createNewTile();
         }
 
+        require(!tiles.isCoreTile(tileId), "Core tiles cannot be transfered.");
         address owner = tiles.ownerOf(tileId);
         tiles.forceTransfer(tileId, newOwner);
         emit ForcibleTransfer(owner, newOwner, tileId);
