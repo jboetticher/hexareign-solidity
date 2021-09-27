@@ -21,8 +21,6 @@ contract GameStructs {
         uint8 improvementPoints;
     }
 
-    uint256 internal ONE_TOKEN = 1000000000000000000;
-
     function _createNewTile() internal view returns (TileMetadata memory) {
         return TileMetadata(
             block.timestamp,

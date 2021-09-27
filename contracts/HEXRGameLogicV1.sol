@@ -95,7 +95,7 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
 
     function tileUpgradeCost(uint tileId) override public view returns(uint) {
         TileMetadata memory meta = gameData.getTileData(tileId);
-        return ((ONE_TOKEN * 5 + (ONE_TOKEN / 20) * meta.tileLevel) * meta.tileLevel);
+        return ((5 ether + (1 ether / 20) * meta.tileLevel) * meta.tileLevel);
     }
     
     function colonizeTile(uint tileId, uint neighboringOwnedTileId) override external isTileOwner(neighboringOwnedTileId) {
@@ -110,6 +110,6 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
     
     function tileColonizeCost(uint tileId) override public view returns(uint) {
         TileMetadata memory meta = gameData.getTileData(tileId);
-        return ((meta.tileLevel * ONE_TOKEN + meta.priceIncrease) / 100) * meta.priceIncreasePercentageBoost;
+        return ((meta.tileLevel * 1 ether + meta.priceIncrease) / 100) * meta.priceIncreasePercentageBoost;
     }
 }
