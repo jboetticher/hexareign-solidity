@@ -31,7 +31,7 @@ contract TileNFT is ERC721Enumerable, Ownable {
     constructor() ERC721("Hexoreign Tile", "HEXO-TIL") { }
     
     function addTiles(uint48[] memory map) external onlyOwner {
-        // Loops until the end or runs out of gas.
+        // 40 is the maximum amount that can be minted
         require(map.length <= 40);
         uint8 i = 0;
         uint24 supply = uint24(totalSupply());
