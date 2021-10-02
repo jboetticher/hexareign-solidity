@@ -10,6 +10,7 @@ contract GameStructs {
         uint16 tokenGenerationPercentageBoost;
         uint256 priceIncrease;
         uint16 priceIncreasePercentageBoost;
+        // TODO: Turn this into a uint16
         uint256 upgradeIncreasePercentageBoost;
         ImprovementContainer improvements;
     }
@@ -26,7 +27,7 @@ contract GameStructs {
             block.timestamp,
             1,
             100,
-            115,
+            0,
             0,
             0,
             0,
