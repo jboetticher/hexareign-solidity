@@ -114,6 +114,7 @@ contract HEXRGameData is Context, Ownable, GameStructs {
      *  Initializes a tile if its data hasn't been initialized yet.
      */
     function initializeTile(uint tileId) external {
+        require(tileId < tiles.totalSupply(), "Tile Metadata: tile does not exist.");
         require(tileData[tileId].tileLevel == 0, "Tile has already been initialized");
         tileData[tileId] = _createNewTile();
     }

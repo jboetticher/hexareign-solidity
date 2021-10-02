@@ -70,12 +70,17 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
     function claimableTokens(uint tileId) override public view returns(uint) {
         TileMetadata memory meta = gameData.getTileData(tileId);
         uint timeDif = _timeDifference(meta.lastTokenClaim);
+
         if(timeDif < 1 hours) return 0;
         else {
-            return 
-                ((uint256(meta.tokenGeneration * 10 ** 10) + uint256(meta.tileLevel)) * 
-                uint256(meta.tokenGenerationPercentageBoost) / 100) * 
-                timeDif;
+            // Token generation starts as 100. Tile level starts at 15.
+            // 1 day is 86400 seconds.
+            // (100 + 15) * 10e11 / 10e18 * 86400 = .993 tokens per day
+            uint256 baseTokenGen = (meta.tokenGeneration + meta.tileLevel * 15) * 10e11;
+            baseTokenGen *= (meta.tokenGenerationPercentageBoost + 100);
+            baseTokenGen /= 100;
+            baseTokenGen *= timeDif;
+            return baseTokenGen;
         }
     }
     
@@ -95,13 +100,29 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
 
     function tileUpgradeCost(uint tileId) override public view returns(uint) {
         TileMetadata memory meta = gameData.getTileData(tileId);
-        return ((5 ether + (1 ether / 20) * meta.tileLevel) * meta.tileLevel);
+        
+        // Level 1 -> Level 2 upgrade: 1 + .05 = 1.05.
+        // Level 1 -> Level 2 rewards: +0.12 generation per day
+
+        // Level 10 -> Level 11 upgrade: 1 + .5 = 1.5
+        // level 10 -> Level 11 rewars: +0.12 generation per day
+
+        uint baseCost = 1 ether + (1 ether / 20) * meta.tileLevel;
+        baseCost *= (meta.upgradeIncreasePercentageBoost + 100);
+        baseCost /= 100;
+        return baseCost;
     }
     
     function colonizeTile(uint tileId, uint neighboringOwnedTileId) override external isTileOwner(neighboringOwnedTileId) {
         address tileOwner = _tiles().ownerOf(tileId);
         require(tileOwner == address(_tiles()));
 
+        // requires an initialization of a non colonized tile
+        if(gameData.getTileData(tileId).tileLevel == 0) {
+            gameData.initializeTile(tileId);
+        }
+
+        // sends fee back into game
         uint onePercentCost = tileColonizeCost(tileId) / 100;
         _token().transferFrom(_msgSender(), tileOwner, onePercentCost * 90);
         _token().transferFrom(_msgSender(), address(gameData), onePercentCost * 10);
@@ -110,6 +131,9 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
     
     function tileColonizeCost(uint tileId) override public view returns(uint) {
         TileMetadata memory meta = gameData.getTileData(tileId);
-        return ((meta.tileLevel * 1 ether + meta.priceIncrease) / 100) * meta.priceIncreasePercentageBoost;
+        uint baseCost = (meta.tileLevel * 1 ether) + meta.priceIncrease * 10e16;
+        baseCost *= (meta.priceIncreasePercentageBoost + 100);
+        baseCost /= 100;
+        return baseCost;
     }
 }

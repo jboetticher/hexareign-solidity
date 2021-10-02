@@ -16,7 +16,7 @@ module.exports = async function (deployer) {
 
   // Set HEXRGameData within the tileNFT
   let hexrGameData = await HEXRGameData.deployed();
-  tileNFT.setHEXRGameData(hexrGameData.address);
+  await tileNFT.setHEXRGameData(hexrGameData.address);
 
   // Deploy game logic
   await deployer.deploy(HEXRGameLogicV1, hexrGameData.address);
