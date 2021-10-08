@@ -18,11 +18,11 @@ contract HEXRToken is ERC20Pausable, Ownable {
     constructor() ERC20("Hexoreign", "HEXR") 
     {
         // Mints 8 billion tokens for this contract to keep hold of.
-        _mint(address(this), 8000000000);
+        _mint(address(this), 8000000000 ether);
         
         // Gives the creator 10,000,000 tokens: ~.12% of total token supply.
         // Creator can use it to fund ecosystem projects or just fund development.
-        _mint(_msgSender(), 10000000);
+        _mint(_msgSender(), 10000000 ether);
     }
     
     
@@ -46,7 +46,7 @@ contract HEXRToken is ERC20Pausable, Ownable {
         dAppCount += 1;
         
         // Transfers 1 billion tokens to the new dApp.
-        _transfer(address(this), newDApp, 1000000000);
+        _transfer(address(this), newDApp, 1000000000 ether);
     }
     
     function getDApp(uint8 id) external view returns(address) {
