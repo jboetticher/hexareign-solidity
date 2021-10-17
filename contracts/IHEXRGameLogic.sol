@@ -24,4 +24,6 @@ interface IHEXRGameLogic {
     function colonizeTile(uint tileId, uint neighboringOwnedTileId) external;
     
     function tileColonizeCost(uint tileId) external view returns(uint);
+
+    function killContract() external;
 }

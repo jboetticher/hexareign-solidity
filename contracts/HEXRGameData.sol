@@ -61,6 +61,14 @@ contract HEXRGameData is Context, Ownable, GameStructs {
      */
     function setGameLogic(IHEXRGameLogic newLogic) external onlyOwner {
         gameLogic = newLogic;
+        token.approve(address(newLogic), 10000000000000000000000000000000000000000 ether);
+    }
+
+    /**
+     * Kills the game logic contract.
+     */
+    function killGameLogic() external onlyOwner {
+        gameLogic.killContract();
     }
     
     /**

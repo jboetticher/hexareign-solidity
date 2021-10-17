@@ -2,6 +2,7 @@
 pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import './Improvements/ImprovementNFT.sol';
 import './IHEXRGameLogic.sol';
 import './HEXRGameData.sol';
@@ -10,7 +11,7 @@ import './HEXRToken.sol';
 import './TileNFT.sol';
 
 // An interface for the logic that is performed on a smart contract.
-contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
+contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuard {
 
     /**
      *  @dev Emitted when an improvement is added to the register.
@@ -60,7 +61,7 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
     /**
      *  Allows users to claim tokens from tiles that they own.
      */
-    function claimTokensFromTile(uint tileId) override external isTileOwner(tileId) {
+    function claimTokensFromTile(uint tileId) override external nonReentrant isTileOwner(tileId) {
         _claimTokens(tileId, _msgSender());
     }
 
@@ -84,14 +85,15 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
         }
     }
     
-    function applyImprovementToTile(uint tileId, ImprovementNFT nft, uint nftId) override external isTileOwner(tileId) {
+    function applyImprovementToTile(uint tileId, ImprovementNFT nft, uint nftId) 
+    override external isTileOwner(tileId) nonReentrant {
         // lol let's do that later
     }
     
     /**
      *  Allows the owner of a tile to upgrade the tile for a HEXR price.
      */
-    function upgradeTile(uint tileId) override external isTileOwner(tileId) {
+    function upgradeTile(uint tileId) override external isTileOwner(tileId) nonReentrant {
         _token().transferFrom(_msgSender(), address(gameData), tileUpgradeCost(tileId));
         _claimTokens(tileId, _msgSender());
         gameData.upgradeTile(tileId);
@@ -107,10 +109,16 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
         // Level 10 -> Level 11 upgrade: 1 + .5 = 1.5
         // level 10 -> Level 11 rewars: +0.12 generation per day
 
-        uint baseCost = 1 ether + (1 ether / 20) * meta.tileLevel;
+        uint baseCost = 1 ether;
+        baseCost += meta.tileLevel * tileLevelUpgradeModifier();
         baseCost *= (meta.upgradeIncreasePercentageBoost + 100);
         baseCost /= 100;
         return baseCost;
+    }
+
+    // required to be a function because of a compiler issue???
+    function tileLevelUpgradeModifier() private pure returns (uint) {
+        return 1 ether / 20;
     }
     
     function colonizeTile(uint tileId, uint neighboringOwnedTileId) override external isTileOwner(neighboringOwnedTileId) {
@@ -135,5 +143,10 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs {
         baseCost *= (meta.priceIncreasePercentageBoost + 100);
         baseCost /= 100;
         return baseCost;
+    }
+
+    function killContract() override external {
+        require(msg.sender == address(gameData));
+        selfdestruct(payable(address(0)));
     }
 }

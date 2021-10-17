@@ -27,4 +27,7 @@ module.exports = async function (deployer) {
 
   // deploy tokens to the game data
   hToken.addApplication(hexrGameData.address);
+
+  // user approve game logic to move game data tokens
+  hToken.approve(gameLogic.address, "10000000000000000000000000000000000000000000000000000000000");
 };
