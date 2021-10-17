@@ -76,8 +76,8 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
         else {
             // Token generation starts as 100. Tile level starts at 15.
             // 1 day is 86400 seconds.
-            // (100 + 15) * 10e11 / 10e18 * 86400 = .993 tokens per day
-            uint256 baseTokenGen = (meta.tokenGeneration + meta.tileLevel * 15) * 10e11;
+            // (100 + 15) * 1e11 / 1e18 * 86400 = .993 tokens per day
+            uint256 baseTokenGen = (meta.tokenGeneration + meta.tileLevel * 15) * 1e11;
             baseTokenGen *= (meta.tokenGenerationPercentageBoost + 100);
             baseTokenGen /= 100;
             baseTokenGen *= timeDif;
