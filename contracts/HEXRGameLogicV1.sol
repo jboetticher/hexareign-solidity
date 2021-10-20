@@ -72,17 +72,17 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
         TileMetadata memory meta = gameData.getTileData(tileId);
         uint timeDif = _timeDifference(meta.lastTokenClaim);
 
-        if(timeDif < 1 hours) return 0;
-        else {
-            // Token generation starts as 100. Tile level starts at 15.
-            // 1 day is 86400 seconds.
-            // (100 + 15) * 1e11 / 1e18 * 86400 = .993 tokens per day
-            uint256 baseTokenGen = (meta.tokenGeneration + meta.tileLevel * 15) * 1e11;
-            baseTokenGen *= (meta.tokenGenerationPercentageBoost + 100);
-            baseTokenGen /= 100;
-            baseTokenGen *= timeDif;
-            return baseTokenGen;
-        }
+        // Token generation starts as 100. Tile level starts at 15.
+        // 1 day is 86400 seconds.
+        // (100 + 15) * 1e11 / 1e18 * 86400 = .993 tokens per day
+
+        uint256 baseTokenGen = meta.tokenGeneration;
+        baseTokenGen += meta.tileLevel * 15;
+        baseTokenGen *= 1e11;
+        baseTokenGen *= (meta.tokenGenerationPercentageBoost + 100);
+        baseTokenGen *= timeDif;
+        baseTokenGen /= 100;
+        return baseTokenGen;
     }
     
     function applyImprovementToTile(uint tileId, ImprovementNFT nft, uint nftId) 

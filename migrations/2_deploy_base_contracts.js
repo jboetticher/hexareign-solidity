@@ -23,11 +23,5 @@ module.exports = async function (deployer) {
 
   // Set game logic within the game data
   let gameLogic = await HEXRGameLogicV1.deployed();
-  hexrGameData.setGameLogic(gameLogic.address);
-
-  // deploy tokens to the game data
-  hToken.addApplication(hexrGameData.address);
-
-  // user approve game logic to move game data tokens
-  hToken.approve(gameLogic.address, "10000000000000000000000000000000000000000000000000000000000");
+  await hexrGameData.setGameLogic(gameLogic.address);
 };
