@@ -123,7 +123,7 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
     
     function colonizeTile(uint tileId, uint neighboringOwnedTileId) override external isTileOwner(neighboringOwnedTileId) {
         address tileOwner = _tiles().ownerOf(tileId);
-        require(tileOwner == address(_tiles()));
+        //require(tileOwner == address(_tiles()));
 
         // requires an initialization of a non colonized tile
         if(gameData.getTileData(tileId).tileLevel == 0) {
@@ -139,10 +139,16 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
     
     function tileColonizeCost(uint tileId) override public view returns(uint) {
         TileMetadata memory meta = gameData.getTileData(tileId);
-        uint baseCost = (meta.tileLevel * 1 ether) + (meta.priceIncrease * 1 ether / 100);
+        uint baseCost = (meta.tileLevel + 3) * 1 ether;
+        baseCost += meta.priceIncrease * tileColonizeModifier();
         baseCost *= (meta.priceIncreasePercentageBoost + 100);
         baseCost /= 100;
         return baseCost;
+    }
+
+    // required to be a function because of a compiler issue???
+    function tileColonizeModifier() private pure returns (uint) {
+        return 1 ether / 100;
     }
 
     function killContract() override external {
