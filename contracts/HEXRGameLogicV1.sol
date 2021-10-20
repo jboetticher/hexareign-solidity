@@ -139,7 +139,7 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
     
     function tileColonizeCost(uint tileId) override public view returns(uint) {
         TileMetadata memory meta = gameData.getTileData(tileId);
-        uint baseCost = (meta.tileLevel + 1) * 1 ether;
+        uint baseCost = (meta.tileLevel + 3) * 1 ether;
         baseCost += meta.priceIncrease * tileColonizeModifier();
         baseCost *= (meta.priceIncreasePercentageBoost + 100);
         baseCost /= 100;
