@@ -61,5 +61,4 @@ contract HEXRToken is ERC20Pausable, Ownable {
     function resumeTransfers() external onlyOwner whenPaused {
         _unpause();
     }
-    
 }

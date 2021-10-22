@@ -43,8 +43,8 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
      *  Claims the tokens from the tile specified & emits an event.
      */
     function _claimTokens(uint tileId, address claimer) internal {
-        gameData.resetLastClaimed(tileId);
         uint tokensToClaim = claimableTokens(tileId);
+        gameData.resetLastClaimed(tileId);
         gameData.transferTokens(_msgSender(), tokensToClaim);
         emit TokenClaim(tileId, tokensToClaim, claimer);
     }
@@ -53,6 +53,7 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
      *  Returns the time difference between the current block and the time given.
      */
     function _timeDifference(uint lastTokenClaim) internal view returns(uint) {
+        if(lastTokenClaim < block.timestamp) return 0;
         return lastTokenClaim - block.timestamp;
     }
     
@@ -76,7 +77,7 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
         // 1 day is 86400 seconds.
         // (100 + 15) * 1e11 / 1e18 * 86400 = .993 tokens per day
 
-        uint256 baseTokenGen = meta.tokenGeneration;
+        uint baseTokenGen = meta.tokenGeneration;
         baseTokenGen += meta.tileLevel * 15;
         baseTokenGen *= 1e11;
         baseTokenGen *= (meta.tokenGenerationPercentageBoost + 100);
@@ -121,20 +122,50 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
         return 1 ether / 20;
     }
     
-    function colonizeTile(uint tileId, uint neighboringOwnedTileId) override external isTileOwner(neighboringOwnedTileId) {
+    function colonizeTile(uint tileId, uint neighboringOwnedTileId) override external 
+    isTileOwner(neighboringOwnedTileId) nonReentrant {
+        
+        (int16 cX, int16 cY, , , ,) = 
+            _tiles().tileData(tileId);
+        (int16 nX, int16 nY, , , , ) = 
+            _tiles().tileData(neighboringOwnedTileId);
+        int16 xDif = nX - cX;
+        int16 yDif = nY - cY;
+        int16 xAbs = abs(xDif);
+        int16 yAbs = abs(yDif);
+        bool isNeighbor = xAbs == 1 && yAbs == 0; // covers (+1, 0) and (-1, 0)
+        isNeighbor = isNeighbor || (xAbs == 0 && yAbs == 1); // covers (0, +1) and (0, -1)
+        if(cX % 2 == 0) { // if it's even
+            isNeighbor = isNeighbor || (xDif == -1 && yDif == 1); // covers (-1, 1)
+            isNeighbor = isNeighbor || (xDif == 1 && yDif == 1); // covers (1, 1) 
+        }
+        else { // if it's odd
+            isNeighbor = isNeighbor || (xDif == 1 && yDif == -1); // covers (1, -1)
+            isNeighbor = isNeighbor || (xDif == -1 && yDif == -1); // covers (-1, -1)
+        }
+        require(isNeighbor, "Needs to own neighboring tile!");
+        
         address tileOwner = _tiles().ownerOf(tileId);
-        //require(tileOwner == address(_tiles()));
 
         // requires an initialization of a non colonized tile
         if(gameData.getTileData(tileId).tileLevel == 0) {
             gameData.initializeTile(tileId);
         }
 
+        // TODO: require the neighboring owned tile to be nearby
+
         // sends fee back into game
         uint onePercentCost = tileColonizeCost(tileId) / 100;
         _token().transferFrom(_msgSender(), tileOwner, onePercentCost * 90);
         _token().transferFrom(_msgSender(), address(gameData), onePercentCost * 10);
+
+        // TODO: increase the tile colonization cost
+
         gameData.forciblyTransferTile(tileId, _msgSender());
+    }
+
+    function abs(int16 val) private pure returns(int16) {
+        return val < 0 ? -(val) : val;
     }
     
     function tileColonizeCost(uint tileId) override public view returns(uint) {
