@@ -53,10 +53,10 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
      *  Returns the time difference between the current block and the time given.
      */
     function _timeDifference(uint lastTokenClaim) internal view returns(uint) {
-        if(lastTokenClaim < block.timestamp) return 0;
-        return lastTokenClaim - block.timestamp;
-    }
-    
+        if(lastTokenClaim >= block.timestamp) return 0;
+        return block.timestamp - lastTokenClaim;
+    }    
+
 
 
     /**
