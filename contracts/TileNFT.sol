@@ -30,6 +30,9 @@ contract TileNFT is ERC721Enumerable, Ownable {
     
     constructor() ERC721("Hexoreign Tile", "HEXO-TIL") { }
     
+    //#region HEXR Gameplay + Data
+
+    // Adds tiles' data to the map, and mints for each one.
     function addTiles(uint48[] memory map) external onlyOwner {
         // 40 is the maximum amount that can be minted
         require(map.length <= 40);
@@ -46,6 +49,7 @@ contract TileNFT is ERC721Enumerable, Ownable {
         }
     }
     
+    // Returns true if the tile given should be considered a core tile.
     function isCoreTile(uint id) public pure returns(bool) {
         return id % 20 == 3;
     }
@@ -63,6 +67,7 @@ contract TileNFT is ERC721Enumerable, Ownable {
         _safeTransfer(ownerOf(id), newOwner, id, "");
     }
     
+    // Returns the tile data of a tile.
     function tileData(uint id) external view
     returns(int16 x, int16 y, uint8 biome, uint8 landform, uint8 height, uint16 meta)
     {
@@ -76,9 +81,12 @@ contract TileNFT is ERC721Enumerable, Ownable {
         meta = uint8(storedData);
     }
     
+    // Internal function that helps decode tile data.
     function _decodeU16to12(uint16 e) internal pure returns(int16) {
         if(e >= 2048) e = e | 0xF000;
         return int16(e);
     }
+
+    //#endregion
     
 }
