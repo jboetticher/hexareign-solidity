@@ -8,8 +8,6 @@ import "./TileNFT.sol";
 // First the auctioneer must approve this contract. Preferrably for all tokens.
 // Then the auctioneer must activate the openAuction for each NFT they intend to auction.
 
-// TODO: give a 3% tax to the owner, and allow them to somehow take out the eth
-
 contract TileAuction is Ownable {
     struct Auction {
         uint256 highestBid;
