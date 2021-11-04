@@ -9,7 +9,7 @@ import "./HEXRGameData.sol";
 // First the auctioneer must approve this contract. Preferrably for all tokens.
 // Then the auctioneer must activate the openAuction for each NFT they intend to auction.
 
-contract TileAuction is Ownable {
+contract TileSale is Ownable {
 
     constructor(TileNFT _tiles, HEXRGameData _data, uint _tilePrice) {
         tiles = _tiles;

@@ -10,6 +10,14 @@ module.exports = async function (deployer) {
   // deploy tile auction
   await deployer.deploy(TileAuction, tileNFT.address);
 
-  // deploy tile sale (1 ether)
-  await deployer.deploy(TileSale, tileNFT.address, data.address, "1000000000000000000")
+  // deploy tile sale (0.1 ether)
+  // YOU SHOULD CHANGE THIS WHEN DEPLOYING ONTO YOUR DESIRED NETWORK
+  await deployer.deploy(TileSale, tileNFT.address, data.address, "100000000000000000")
+  let tileSale = await TileSale.deployed();
+  let tiles = await TileNFT.deployed();
+
+  // automatically puts 2 into the market
+  let accounts = await web3.eth.getAccounts()
+  tiles.transferFrom(accounts[0], tiles.address, 23);
+  tiles.transferFrom(accounts[0], tiles.address, 43);
 }
