@@ -31,7 +31,7 @@ contract HEXRGameData is Context, Ownable, GameStructs {
     IHEXRGameLogic public gameLogic;
     
     // A list of valid improvements.
-    mapping(ImprovementNFT=>bool) public validImprovements;
+    mapping(address=>bool) public validImprovements;
     
     // The valid tiles in the game.
     TileNFT public tiles;
@@ -74,7 +74,7 @@ contract HEXRGameData is Context, Ownable, GameStructs {
     /**
      *  Adds an improvement contract from the list of approved improvements.
      */
-    function addImprovement(ImprovementNFT nft) external onlyOwner {
+    function addImprovement(address nft) external onlyOwner {
         validImprovements[nft] = true;
         emit ImprovementAdded(address(nft));
     }
@@ -82,7 +82,7 @@ contract HEXRGameData is Context, Ownable, GameStructs {
     /**
      *  Removes an improvement contract from the list of approved improvements.
      */
-    function removeImprovement(ImprovementNFT nft) external onlyOwner {
+    function removeImprovement(address nft) external onlyOwner {
         validImprovements[nft] = false;
         emit ImprovementRemoved(address(nft));
     }

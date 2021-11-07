@@ -86,9 +86,15 @@ contract HEXRGameLogicV1 is Context, IHEXRGameLogic, GameStructs, ReentrancyGuar
         return baseTokenGen;
     }
     
+    /**
+     *  Applies an improvement to a tile. Most of the logic is within the ImprovementNFT.
+     */
     function applyImprovementToTile(uint tileId, ImprovementNFT nft, uint nftId) 
     override external isTileOwner(tileId) nonReentrant {
-        // lol let's do that later
+        require(gameData.validImprovements(address(nft)), "Must be a valid improvement.");
+        require(nft.ownerOf(nftId) == _msgSender(), "Must own the improvement.");
+        require(!nft.isApplied(nftId), "The nft must not be applied.");
+        nft.applyNFTToTile(gameData.getTileData(tileId));
     }
     
     /**

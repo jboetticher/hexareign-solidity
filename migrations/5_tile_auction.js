@@ -18,6 +18,6 @@ module.exports = async function (deployer) {
 
   // automatically puts 2 into the market
   let accounts = await web3.eth.getAccounts()
-  tiles.transferFrom(accounts[0], tiles.address, 23);
-  tiles.transferFrom(accounts[0], tiles.address, 43);
+  tiles.transferFrom(accounts[0], tileSale.address, 23);
+  tiles.transferFrom(accounts[0], tileSale.address, 43);
 }
