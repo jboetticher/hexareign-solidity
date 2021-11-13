@@ -5,6 +5,8 @@
     "fs": "0.0.1-security"
   },
   "scripts": {
-    "console-ropsten": "truffle console --network ropsten"
+    "console-ropsten": "truffle console --network ropsten",
+    "console-hecotest": "truffle console --network hecotest",
+    "console-hecomain": "truffle console --network hecomain"
   }
 }

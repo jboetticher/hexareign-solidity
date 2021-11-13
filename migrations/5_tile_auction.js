@@ -8,7 +8,7 @@ module.exports = async function (deployer) {
   let data = await HEXRGameData.deployed();
   
   // deploy tile auction
-  await deployer.deploy(TileAuction, tileNFT.address);
+  //await deployer.deploy(TileAuction, tileNFT.address);
 
   // deploy tile sale (0.1 ether)
   // YOU SHOULD CHANGE THIS WHEN DEPLOYING ONTO YOUR DESIRED NETWORK
