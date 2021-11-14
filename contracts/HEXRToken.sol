@@ -10,7 +10,7 @@ contract HEXRToken is ERC20Pausable, Ownable {
     uint8 public dAppCount;
     
     // The addresses of the dApps that have had tokens allocated to it.
-    address[8] internal dAppAddresses;
+    address[4] internal dAppAddresses;
     
     // The time a dApp was last allocated 1 billion tokens.
     uint public lastDAppAllocated;
@@ -18,7 +18,7 @@ contract HEXRToken is ERC20Pausable, Ownable {
     constructor() ERC20("Hexoreign", "HEXR") 
     {
         // Mints 8 billion tokens for this contract to keep hold of.
-        _mint(address(this), 8000000000 ether);
+        _mint(address(this), 4000000000 ether);
         
         // Gives the creator 10,000,000 tokens: ~.12% of total token supply.
         // Creator can use it to fund ecosystem projects or just fund development.
@@ -31,8 +31,8 @@ contract HEXRToken is ERC20Pausable, Ownable {
         // Ensures that it's not the 0 address.
         require(newDApp != address(0), "ERC20: application to add is the zero address");
         
-        // There can only be a maximum of 8 applications.
-        require(dAppCount < 8);
+        // There can only be a maximum of 4 applications.
+        require(dAppCount < 4);
     
         // Makes sure that there is a 6 month difference between the first 2 and the next applications.
         // Stops a massive influx of tokens at any given time.

@@ -12,7 +12,7 @@ module.exports = async function (deployer) {
 
   // deploy tile sale (0.1 ether)
   // YOU SHOULD CHANGE THIS WHEN DEPLOYING ONTO YOUR DESIRED NETWORK
-  await deployer.deploy(TileSale, tileNFT.address, data.address, "100000000000000000")
+  await deployer.deploy(TileSale, tileNFT.address, data.address, "200000000000000000")
   let tileSale = await TileSale.deployed();
   let tiles = await TileNFT.deployed();
 
@@ -20,4 +20,7 @@ module.exports = async function (deployer) {
   let accounts = await web3.eth.getAccounts()
   tiles.transferFrom(accounts[0], tileSale.address, 23);
   tiles.transferFrom(accounts[0], tileSale.address, 43);
+  tiles.transferFrom(accounts[0], tileSale.address, 63);
+  tiles.transferFrom(accounts[0], tileSale.address, 83);
+  tiles.transferFrom(accounts[0], tileSale.address, 103);
 }

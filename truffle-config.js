@@ -91,6 +91,28 @@ module.exports = {
       gas: 8000000,
       confirmations: 2,
       timeoutBlocks: 200
+    },
+    okextest: {
+      provider: () => new HDWalletProvider({
+        mnemonic,
+        providerOrUrl: 'https://exchaintestrpc.okex.org',
+        chainId: 65
+      }),
+      network_id: 65,
+      gas: 8000000,
+      confirmations: 2,
+      timeoutBlocks: 200
+    },
+    okexmain: {
+      provider: () => new HDWalletProvider({
+        mnemonic,
+        providerOrUrl: 'https://exchainrpc.okex.org',
+        chainId: 66
+      }),
+      network_id: 66,
+      gas: 8000000,
+      confirmations: 2,
+      timeoutBlocks: 200
     }
     // Useful for private networks
     // private: {
