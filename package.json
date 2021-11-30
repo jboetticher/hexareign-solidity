@@ -9,6 +9,7 @@
     "console-hecotest": "truffle console --network hecotest",
     "console-hecomain": "truffle console --network hecomain",
     "console-okextest": "truffle console --network okextest",
-    "console-okexmain": "truffle console --network okexmain"
+    "console-okexmain": "truffle console --network okexmain",
+    "console-thetamain": "truffle console --network thetamain"
   }
 }

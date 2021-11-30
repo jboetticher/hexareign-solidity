@@ -15,7 +15,7 @@ contract HEXRToken is ERC20Pausable, Ownable {
     // The time a dApp was last allocated 1 billion tokens.
     uint public lastDAppAllocated;
     
-    constructor() ERC20("Hexoreign", "HEXR") 
+    constructor() ERC20("Hexareign Gold", "HEXR") 
     {
         // Mints 8 billion tokens for this contract to keep hold of.
         _mint(address(this), 4000000000 ether);

@@ -1,5 +1,6 @@
 *.meta
 .secret
+.secret-theta
 
 # Be sure to put all of the stuff underneath this in the 
 installed_contracts

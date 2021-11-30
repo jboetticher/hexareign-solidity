@@ -23,6 +23,7 @@ const infuraRopstenKey = "7824c37501684902b36af74a542e3663";
 
 const fs = require('fs');
 const mnemonic = fs.readFileSync(".secret").toString().trim();
+const thetaPrivateKey = fs.readFileSync(".secret-theta").toString().trim();
 
 module.exports = {
   /**
@@ -113,6 +114,20 @@ module.exports = {
       gas: 8000000,
       confirmations: 2,
       timeoutBlocks: 200
+    },
+    thetamain: {
+      provider: () => {
+ 
+        // Replace the private key below with the private key of the deployer wallet. 
+        // Make sure the deployer wallet has a sufficient amount of TFuel, e.g. 100 TFuel
+ 
+        return new HDWalletProvider({
+          privateKeys: [thetaPrivateKey],
+          providerOrUrl: 'https://eth-rpc-api.thetatoken.org/rpc',
+        });
+      },
+      network_id: 361,
+      gasPrice: 4000000000000,
     }
     // Useful for private networks
     // private: {
