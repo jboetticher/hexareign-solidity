@@ -1,5 +1,5 @@
 # Hexareign Truffle Project
-This project contains the solidity code used to make the hexareign game. Feel free to open an issue if one is found.  
+This project contains the solidity code used to make the [hexareign game](https://hexareign.com/). Feel free to open an issue if one is found.  
 
 ### Dependencies
 You will need Truffle, Ganache, and NPM to work with this project.  
